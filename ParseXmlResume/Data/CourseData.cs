@@ -7,12 +7,11 @@ using System.Xml.Serialization;
 namespace ParseXmlResume.Data
 {
     
-    [XmlRoot("cl")]
     public class CourseData
     {
-        [XmlElement("cn")]
+        [XmlElement("CN")]
         public string CourseName { get; set; }
-        [XmlElement("cd")]
+        [XmlElement("CD")]
         public string CourseDescription { get; set; }
     }
 }

@@ -11,11 +11,11 @@ namespace ParseXmlResume.Data
         [XmlElement("name")]
         public string Name { get; set; }
         [XmlElement("BD")]
-        public DateTime Birthdate { get; set; }
+        public string Birthdate { get; set; }
         [XmlElement("AY")]
-        public int AcademicYear { get; set; }
+        public string AcademicYear { get; set; }
         [XmlElement("PN")]
-        public int Phonenumber { get; set; }
+        public string Phonenumber { get; set; }
         [XmlElement("skills")]
         public string Skills { get; set; }
     }

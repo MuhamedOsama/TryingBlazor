@@ -4,50 +4,46 @@
 @inject WeatherForecastService ForecastService
 @inject ResumeService ResumeService
 
-<h1>Weather forecast</h1>
+    <div class="container">
+        <h1 class="text-center">XML CV</h1>
+        <div>
 
-<p>This component demonstrates fetching data from a service.</p>
+            <h4>Upload Your xml cv file first</h4>
+            <InputFile OnChange="HandleFileSelected" />
 
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div>
-       
-        <h4>Single File</h4>
-        <form method="post">
+        </div>
+        @if (data == null)
+        {
+            <div>Your CV Will be displayed here!</div>
+        }
+        else
+        {
 
-        </form>
+            <div class="row">
+                <div class="col col-lg-12">
+
+                    <h2 class="Text-center">Personal Data</h2>
+                    <h4><b>Name : </b>@data.PersonalData.Name</h4>
+                    <h4><b>Birthdate : </b>@data.PersonalData.Birthdate</h4>
+                    <h4><b>Academic Year : </b>@data.PersonalData.AcademicYear</h4>
+                    <h4><b>Phonenumber : </b>@data.PersonalData.Phonenumber</h4>
+                    <h4><b>Skills : </b>@data.PersonalData.Skills</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-12">
+                    <h2>Course Data</h2>
+                    <h4><b>Course Name : </b>@data.CourseData.CourseName</h4>
+                    <h4><b>Course Description : </b>@data.CourseData.CourseDescription</h4>
+                </div>
+            </div>
+
+
+        }
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-                <th>CourseName</th>
-                <th>Course Number</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-            <tr>
-                <td>@forecast.Date.ToShortDateString()</td>
-                <td>@forecast.TemperatureC</td>
-                <td>@forecast.TemperatureF</td>
-                <td>@forecast.Summary</td>
-                <td>@data.CourseData.CourseName</td>
-                <td>@data.CourseData.CourseDescription</td>
 
-            </tr>
-            }
-        </tbody>
-    </table>
-}
+
 
 @code {
     private WeatherForecast[] forecasts;
@@ -56,6 +52,12 @@ else
     protected override async Task OnInitializedAsync()
     {
         forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
-        data = ResumeService.ParseResumeFromXml();
+    }
+    async Task HandleFileSelected(IFileListEntry[] files)
+    {
+        // Do something with the files, e.g., read them
+        data = await ResumeService.ParseResumeFromXmlAsync(files);
+        StateHasChanged();
+        Console.WriteLine(data.CourseData.CourseName);
     }
 }

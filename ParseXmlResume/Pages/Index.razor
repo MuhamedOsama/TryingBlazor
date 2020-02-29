@@ -1,3 +1,64 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+@using ParseXmlResume.Data
+@inject WeatherForecastService ForecastService
+@inject ResumeService ResumeService
+
+<div class="container">
+    <h1 class="text-center">XML CV</h1>
+    <div>
+
+        <h4>Upload Your xml cv file first</h4>
+        <InputFile OnChange="HandleFileSelected" />
+
+    </div>
+    @if (data == null)
+    {
+        <div>Your CV Will be displayed here!</div>
+    }
+    else
+    {
+
+        <div class="row">
+            <div class="col col-lg-12">
+
+                <h2 class="Text-center">Personal Data</h2>
+                <h4><b>Name : </b>@data.PersonalData.Name</h4>
+                <h4><b>Birthdate : </b>@data.PersonalData.Birthdate</h4>
+                <h4><b>Academic Year : </b>@data.PersonalData.AcademicYear</h4>
+                <h4><b>Phonenumber : </b>@data.PersonalData.Phonenumber</h4>
+                <h4><b>Skills : </b>@data.PersonalData.Skills</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-12">
+                <h2>Course Data</h2>
+                <h4><b>Course Name : </b>@data.CourseData.CourseName</h4>
+                <h4><b>Course Description : </b>@data.CourseData.CourseDescription</h4>
+            </div>
+        </div>
+
+
+    }
+</div>
+
+
+
+@code {
+    private WeatherForecast[] forecasts;
+    private Resume data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+    async Task HandleFileSelected(IFileListEntry[] files)
+    {
+        // Do something with the files, e.g., read them
+        data = await ResumeService.ParseResumeFromXmlAsync(files);
+        StateHasChanged();
+        Console.WriteLine(data.CourseData.CourseName);
+    }
+}
+
