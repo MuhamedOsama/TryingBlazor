@@ -1,0 +1,61 @@
+﻿@page "/fetchdata"
+
+@using ParseXmlResume.Data
+@inject WeatherForecastService ForecastService
+@inject ResumeService ResumeService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div>
+       
+        <h4>Single File</h4>
+        <form method="post">
+
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+                <th>CourseName</th>
+                <th>Course Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+            <tr>
+                <td>@forecast.Date.ToShortDateString()</td>
+                <td>@forecast.TemperatureC</td>
+                <td>@forecast.TemperatureF</td>
+                <td>@forecast.Summary</td>
+                <td>@data.CourseData.CourseName</td>
+                <td>@data.CourseData.CourseDescription</td>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WeatherForecast[] forecasts;
+    private Resume data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        data = ResumeService.ParseResumeFromXml();
+    }
+}
